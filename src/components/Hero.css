@@ -5,6 +5,16 @@
   display: flex;
   flex-direction: column;
   background:
+    linear-gradient(
+      125deg,
+      transparent 0%,
+      transparent 22%,
+      rgba(170, 205, 230, 0.1) 38%,
+      rgba(225, 240, 250, 0.16) 50%,
+      rgba(170, 205, 230, 0.1) 62%,
+      transparent 78%,
+      transparent 100%
+    ),
     radial-gradient(60% 50% at 85% 12%, rgba(2, 48, 71, 0.55), transparent 70%),
     radial-gradient(50% 45% at 10% 95%, rgba(2, 48, 71, 0.45), transparent 70%),
     var(--bg);
@@ -36,9 +46,12 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .brand-mark {
+  -webkit-user-drag: none;
   height: 56px;
   width: auto;
 }
@@ -75,6 +88,19 @@
   text-decoration: none;
 }
 
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
 .hero-main {
   flex: 1;
   display: flex;
@@ -104,44 +130,39 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  display: flex;
-  width: 200%;
+  right: 0;
   height: 260px;
-}
-
-.wave-layer svg {
-  width: 50%;
-  height: 100%;
-  flex-shrink: 0;
-  display: block;
+  background-repeat: repeat-x;
+  background-size: 480px 260px;
 }
 
 .wave-back {
-  opacity: 0.3;
+  opacity: 0.42;
   bottom: -14px;
-  animation: wave-scroll 26s linear infinite;
-}
-
-.wave-back path {
-  fill: #2c74b3;
+  animation: wave-scroll-left 26s linear infinite;
 }
 
 .wave-front {
-  opacity: 0.16;
+  opacity: 0.24;
   bottom: -6px;
-  animation: wave-scroll 17s linear infinite reverse;
+  animation: wave-scroll-right 17s linear infinite;
 }
 
-.wave-front path {
-  fill: #8ecae6;
-}
-
-@keyframes wave-scroll {
+@keyframes wave-scroll-left {
   from {
-    transform: translateX(0);
+    background-position-x: 0;
   }
   to {
-    transform: translateX(-50%);
+    background-position-x: -480px;
+  }
+}
+
+@keyframes wave-scroll-right {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 480px;
   }
 }
 
@@ -284,6 +305,43 @@
   }
 }
 
+@media (max-width: 860px) {
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    margin-top: 12px;
+    padding: 12px 20px 20px;
+    background: var(--deep);
+    border-bottom: 1px solid rgba(245, 248, 250, 0.08);
+  }
+
+  .nav-links.is-open {
+    display: flex;
+  }
+
+  .nav-link {
+    padding: 12px 4px;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(245, 248, 250, 0.06);
+  }
+
+  .nav-cta {
+    margin-top: 10px;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 @media (max-width: 640px) {
   .site-header {
     padding: 20px;
@@ -295,19 +353,6 @@
 
   .brand-name {
     font-size: 24px;
-  }
-
-  .nav-links {
-    gap: 14px;
-  }
-
-  .nav-link {
-    font-size: 13px;
-  }
-
-  .nav-cta {
-    padding: 8px 16px;
-    font-size: 13px;
   }
 
   .hero-main {

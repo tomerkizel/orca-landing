@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTypewriter } from '../hooks/useTypewriter'
 import { DotField } from './DotField'
 import orcaLogo from '../assets/orca.svg'
@@ -41,8 +41,39 @@ const LINES: Segment[][] = [
 
 const LINE_TEXTS = LINES.map((segments) => segments.map((segment) => segment.text).join(''))
 
-const WAVE_BACK_PATH = 'M0,45 C200,90 400,0 600,45 C800,90 1000,0 1200,45 L1200,120 L0,120 Z'
-const WAVE_FRONT_PATH = 'M0,60 C150,20 350,100 600,60 C850,20 1050,100 1200,60 L1200,120 L0,120 Z'
+function waveTileDataUri(
+  path: string,
+  crest: string,
+  stops: [string, string],
+  strokeColor: string,
+  strokeWidth: number,
+) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 120" preserveAspectRatio="none">
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="${stops[0]}"/>
+<stop offset="100%" stop-color="${stops[1]}"/>
+</linearGradient></defs>
+<path d="${path}" fill="url(#g)"/>
+<path d="${crest}" fill="none" stroke="${strokeColor}" stroke-width="${strokeWidth}" vector-effect="non-scaling-stroke"/>
+</svg>`
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
+}
+
+const WAVE_BACK_URI = waveTileDataUri(
+  'M0,48 C180,95 380,5 600,48 L600,120 L0,120 Z',
+  'M0,48 C180,95 380,5 600,48',
+  ['#4a94c9', '#173f61'],
+  'rgba(255,255,255,0.55)',
+  1.6,
+)
+
+const WAVE_FRONT_URI = waveTileDataUri(
+  'M0,62 C140,15 360,110 600,62 L600,120 L0,120 Z',
+  'M0,62 C140,15 360,110 600,62',
+  ['#c8e9f8', '#5fa8d3'],
+  'rgba(255,255,255,0.75)',
+  1.4,
+)
 
 function renderLines(segments: Segment[], revealedLength: number): ReactNode[][] {
   let remaining = revealedLength
@@ -69,17 +100,8 @@ function renderLines(segments: Segment[], revealedLength: number): ReactNode[][]
   return lines
 }
 
-function WaveLayer({ className, path }: { className: string; path: string }) {
-  return (
-    <div className={`wave-layer ${className}`} aria-hidden="true">
-      <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <path d={path} />
-      </svg>
-      <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <path d={path} />
-      </svg>
-    </div>
-  )
+function WaveLayer({ className, dataUri }: { className: string; dataUri: string }) {
+  return <div className={`wave-layer ${className}`} style={{ backgroundImage: dataUri }} aria-hidden="true" />
 }
 
 function ArrowIcon() {
@@ -96,17 +118,41 @@ function ArrowIcon() {
   )
 }
 
+function MenuIcon({ open }: { open: boolean }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      {open ? (
+        <path
+          d="M6 6L18 18M18 6L6 18"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+      ) : (
+        <path
+          d="M4 7H20M4 12H20M4 17H20"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+      )}
+    </svg>
+  )
+}
+
 export function Hero() {
   const { display, lineIndex } = useTypewriter(LINE_TEXTS)
   const lines = renderLines(LINES[lineIndex], display.length)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = () => setMenuOpen(false)
 
   return (
     <div className="hero">
       <DotField />
 
       <div className="hero-waves">
-        <WaveLayer className="wave-back" path={WAVE_BACK_PATH} />
-        <WaveLayer className="wave-front" path={WAVE_FRONT_PATH} />
+        <WaveLayer className="wave-back" dataUri={WAVE_BACK_URI} />
+        <WaveLayer className="wave-front" dataUri={WAVE_FRONT_URI} />
       </div>
 
       <header className="site-header">
@@ -115,23 +161,33 @@ export function Hero() {
           <span className="brand-name">Orca</span>
         </div>
 
-        <nav className="nav-links">
-          <a href="#" className="nav-link">
+        <button
+          type="button"
+          className="menu-toggle"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <MenuIcon open={menuOpen} />
+        </button>
+
+        <nav className={`nav-links${menuOpen ? ' is-open' : ''}`}>
+          <a href="#" className="nav-link" onClick={closeMenu}>
             Use case
           </a>
-          <a href="#" className="nav-link">
+          <a href="#" className="nav-link" onClick={closeMenu}>
             Developers
           </a>
-          <a href="#" className="nav-link">
+          <a href="#" className="nav-link" onClick={closeMenu}>
             Pricing
           </a>
-          <a href="#" className="nav-link">
+          <a href="#" className="nav-link" onClick={closeMenu}>
             Blog
           </a>
-          <a href="#" className="nav-link">
+          <a href="#" className="nav-link" onClick={closeMenu}>
             About us
           </a>
-          <a href="#" className="btn btn-primary nav-cta">
+          <a href="#" className="btn btn-primary nav-cta" onClick={closeMenu}>
             Contact us
           </a>
         </nav>

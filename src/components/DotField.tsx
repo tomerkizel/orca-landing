@@ -123,17 +123,23 @@ export function DotField() {
       frameId = requestAnimationFrame(tick)
     }
 
+    const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+
     resize()
     window.addEventListener('resize', resize)
-    window.addEventListener('mousemove', handleMove)
-    document.documentElement.addEventListener('mouseleave', handleLeave)
+    if (supportsHover) {
+      window.addEventListener('mousemove', handleMove)
+      document.documentElement.addEventListener('mouseleave', handleLeave)
+    }
     frameId = requestAnimationFrame(tick)
 
     return () => {
       cancelAnimationFrame(frameId)
       window.removeEventListener('resize', resize)
-      window.removeEventListener('mousemove', handleMove)
-      document.documentElement.removeEventListener('mouseleave', handleLeave)
+      if (supportsHover) {
+        window.removeEventListener('mousemove', handleMove)
+        document.documentElement.removeEventListener('mouseleave', handleLeave)
+      }
     }
   }, [])
 
