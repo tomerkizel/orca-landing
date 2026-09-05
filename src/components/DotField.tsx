@@ -35,13 +35,11 @@ export function DotField() {
 
   useEffect(() => {
     const canvasEl = canvasRef.current
-    const containerEl = canvasEl?.parentElement
-    if (!canvasEl || !containerEl) return
+    if (!canvasEl) return
     const context = canvasEl.getContext('2d')
     if (!context) return
 
     const canvas = canvasEl
-    const container = containerEl
     const ctx = context
 
     let particles: Particle[] = []
@@ -70,9 +68,8 @@ export function DotField() {
     }
 
     function resize() {
-      const rect = container.getBoundingClientRect()
-      width = rect.width
-      height = rect.height
+      width = window.innerWidth
+      height = window.innerHeight
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       canvas.width = width * dpr
       canvas.height = height * dpr
@@ -83,9 +80,8 @@ export function DotField() {
     }
 
     function handleMove(event: MouseEvent) {
-      const rect = container.getBoundingClientRect()
-      mouse.x = event.clientX - rect.left
-      mouse.y = event.clientY - rect.top
+      mouse.x = event.clientX
+      mouse.y = event.clientY
     }
 
     function handleLeave() {
