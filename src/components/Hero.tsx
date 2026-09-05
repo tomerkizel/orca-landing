@@ -158,7 +158,7 @@ export function Hero() {
       <header className="site-header">
         <div className="brand">
           <img src={orcaLogo} alt="Orca logo" className="brand-mark" />
-          <span className="brand-name">Orca</span>
+          <span className="brand-name">Orca ONE</span>
         </div>
 
         <button
