@@ -18,6 +18,17 @@ const SPRING = 0.04
 const DAMPING = 0.82
 const FADE_START_FROM_BOTTOM = 420
 const FADE_END_FROM_BOTTOM = 200
+const STAR_SEED = 87295163
+
+function mulberry32(seed: number) {
+  let state = seed
+  return function random() {
+    state = (state + 0x6d2b79f5) | 0
+    let t = Math.imul(state ^ (state >>> 15), 1 | state)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
 
 export function DotField() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -39,11 +50,12 @@ export function DotField() {
     const mouse = { x: -9999, y: -9999 }
 
     function buildParticles() {
+      const random = mulberry32(STAR_SEED)
       const count = Math.max(40, Math.floor((width * height) / AREA_PER_PARTICLE))
       particles = []
       for (let i = 0; i < count; i++) {
-        const x = Math.random() * width
-        const y = Math.random() * height
+        const x = random() * width
+        const y = random() * height
         particles.push({
           baseX: x,
           baseY: y,
@@ -51,8 +63,8 @@ export function DotField() {
           y,
           vx: 0,
           vy: 0,
-          radius: 0.6 + Math.random() * 1.6,
-          alpha: 0.25 + Math.random() * 0.65,
+          radius: 0.6 + random() * 1.6,
+          alpha: 0.25 + random() * 0.65,
         })
       }
     }
