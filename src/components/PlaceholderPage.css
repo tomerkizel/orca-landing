@@ -4,10 +4,7 @@
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  background:
-    radial-gradient(60% 50% at 85% 12%, rgba(2, 48, 71, 0.55), transparent 70%),
-    radial-gradient(50% 45% at 10% 95%, rgba(2, 48, 71, 0.45), transparent 70%),
-    var(--bg);
+  background: var(--site-background);
   overflow: hidden;
 }
 

@@ -7,6 +7,21 @@
   --bg: #0f1c2c;
   --hairline: #23384a;
 
+  --site-background:
+    linear-gradient(
+      125deg,
+      transparent 0%,
+      transparent 22%,
+      rgba(170, 205, 230, 0.1) 38%,
+      rgba(225, 240, 250, 0.16) 50%,
+      rgba(170, 205, 230, 0.1) 62%,
+      transparent 78%,
+      transparent 100%
+    ),
+    radial-gradient(60% 50% at 85% 12%, rgba(2, 48, 71, 0.55), transparent 70%),
+    radial-gradient(50% 45% at 10% 95%, rgba(2, 48, 71, 0.45), transparent 70%),
+    var(--bg);
+
   --sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
 
   color-scheme: dark;
