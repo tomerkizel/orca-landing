@@ -1,0 +1,56 @@
+.page {
+  position: relative;
+  z-index: 0;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(60% 50% at 85% 12%, rgba(2, 48, 71, 0.55), transparent 70%),
+    radial-gradient(50% 45% at 10% 95%, rgba(2, 48, 71, 0.45), transparent 70%),
+    var(--bg);
+  overflow: hidden;
+}
+
+.page-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 140px 24px 80px;
+}
+
+.page-panel {
+  width: 100%;
+  max-width: 640px;
+  text-align: center;
+}
+
+.page-eyebrow {
+  margin: 0 0 12px;
+  color: #8ecae6;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.page-title {
+  margin: 0 0 16px;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.page-description {
+  margin: 0 0 36px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: rgba(245, 248, 250, 0.75);
+}
+
+@media (max-width: 640px) {
+  .page-main {
+    padding: 120px 20px 60px;
+  }
+}

@@ -1,7 +1,7 @@
-import { useState, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { useTypewriter } from '../hooks/useTypewriter'
 import { DotField } from './DotField'
-import orcaLogo from '../assets/orca.svg'
+import { SiteHeader } from './SiteHeader'
 import './Hero.css'
 
 interface Segment {
@@ -118,33 +118,9 @@ function ArrowIcon() {
   )
 }
 
-function MenuIcon({ open }: { open: boolean }) {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      {open ? (
-        <path
-          d="M6 6L18 18M18 6L6 18"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-      ) : (
-        <path
-          d="M4 7H20M4 12H20M4 17H20"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-      )}
-    </svg>
-  )
-}
-
 export function Hero() {
   const { display, lineIndex } = useTypewriter(LINE_TEXTS)
   const lines = renderLines(LINES[lineIndex], display.length)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const closeMenu = () => setMenuOpen(false)
 
   return (
     <div className="hero">
@@ -155,43 +131,7 @@ export function Hero() {
         <WaveLayer className="wave-front" dataUri={WAVE_FRONT_URI} />
       </div>
 
-      <header className="site-header">
-        <div className="brand">
-          <img src={orcaLogo} alt="Orca logo" className="brand-mark" />
-          <span className="brand-name">Orca One</span>
-        </div>
-
-        <button
-          type="button"
-          className="menu-toggle"
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <MenuIcon open={menuOpen} />
-        </button>
-
-        <nav className={`nav-links${menuOpen ? ' is-open' : ''}`}>
-          <a href="#" className="nav-link" onClick={closeMenu}>
-            Use case
-          </a>
-          <a href="#" className="nav-link" onClick={closeMenu}>
-            Developers
-          </a>
-          <a href="#" className="nav-link" onClick={closeMenu}>
-            Pricing
-          </a>
-          <a href="#" className="nav-link" onClick={closeMenu}>
-            Blog
-          </a>
-          <a href="#" className="nav-link" onClick={closeMenu}>
-            About us
-          </a>
-          <a href="#" className="btn btn-primary nav-cta" onClick={closeMenu}>
-            Contact us
-          </a>
-        </nav>
-      </header>
+      <SiteHeader />
 
       <main className="hero-main">
         <div className="hero-panel">
